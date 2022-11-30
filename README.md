@@ -16,6 +16,7 @@ use {
 -- Highlight cursor-word like an IDE.
 'nyngwang/murmur.lua',
 config = function ()
+  vim.g.cursor_rgb = '#393939'
   require('murmur').setup {
     max_len = 80, -- maximum word-length to highlight
     exclude_filetypes = {},

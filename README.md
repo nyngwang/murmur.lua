@@ -5,15 +5,16 @@ murmur.lua
 
 1. super fast cursor word highlighting.
 
-   (TBU)
+https://user-images.githubusercontent.com/24765272/204714532-fc84e40d-9408-42b3-8659-382b30a78fd3.mov
 
 2. dynamic changing cursor word with `vim.g.cursor_rgb`.
 
-   (TBU)
+https://user-images.githubusercontent.com/24765272/204715181-40acaf2f-196e-4eb4-8d43-bb6868c6695e.mov
 
 3. IDE-like no blinking diagnostic message.
 
-   (TBU)
+https://user-images.githubusercontent.com/24765272/204716620-b26909cc-9ba9-4475-9d2a-ab5619ab4ad5.mov
+
 
 ## Example Setup.
 

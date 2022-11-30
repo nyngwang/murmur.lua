@@ -46,6 +46,7 @@ end
 -------------------------------------------------------------------------------------------------------
 
 function M.setup(opt)
+  vim.g.cursor_rgb = opt.cursor_rgb ~= nil and opt.cursor_rgb or '#393939'
   max_len = opt.max_len ~= nil and opt.max_len or max_len
   disable_on_lines = opt.disable_on_lines ~= nil and opt.disable_on_lines or disable_on_lines
   exclude_filetypes = opt.exclude_filetypes ~= nil and opt.exclude_filetypes or exclude_filetypes

@@ -1,10 +1,19 @@
 murmur.lua
 ===
 
-## Demo.
+## Feat. and Demo.
 
-TBU.
+1. super fast cursor word highlighting.
 
+   (TBU)
+
+2. dynamic changing cursor word with `vim.g.cursor_rgb`.
+
+   (TBU)
+
+3. IDE-like no blinking diagnostic message.
+
+   (TBU)
 
 ## Example Setup.
 

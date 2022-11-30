@@ -2,7 +2,6 @@ local M = {}
 
 local fn = vim.fn
 local api = vim.api
-local cursor_rgb = '#393939'
 local max_len = 20
 local disable_on_lines = 2000
 local exclude_filetypes = {}
@@ -31,11 +30,6 @@ end
 
 
 local function setup_vim_autocmds()
-  vim.api.nvim_create_autocmd({ 'VimEnter', 'ColorScheme' }, {
-    group = 'murmur.lua',
-    pattern = '*',
-    command = 'hi CURSOR_RGB gui=NONE guibg='..cursor_rgb,
-  })
   vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
     group = 'murmur.lua',
     pattern = '*',
@@ -52,7 +46,6 @@ end
 -------------------------------------------------------------------------------------------------------
 
 function M.setup(opt)
-  cursor_rgb = opt.cursor_rgb ~= nil and opt.cursor_rgb or cursor_rgb
   max_len = opt.max_len ~= nil and opt.max_len or max_len
   disable_on_lines = opt.disable_on_lines ~= nil and opt.disable_on_lines or disable_on_lines
   exclude_filetypes = opt.exclude_filetypes ~= nil and opt.exclude_filetypes or exclude_filetypes
@@ -95,6 +88,7 @@ function M.matchadd()
   end
 
   cursor_word = fn.escape(cursor_word, [[~"\.^$[]*]])
+  vim.cmd('hi! CURSOR_RGB gui=NONE guibg=' .. vim.g.cursor_rgb)
   vim.w.cursor_word_match_id = fn.matchadd('CURSOR_RGB', [[\<]] .. cursor_word .. [[\>]], -1)
 end
 

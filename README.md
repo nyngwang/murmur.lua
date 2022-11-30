@@ -1,6 +1,11 @@
 murmur.lua
 ===
 
+## Intro.
+
+Now you can do some murmur-ing(i.e. callbacks) when your cursor moving to a new wording. And yes, **super-fast** cursor word highlighting is included.
+
+
 ## Feat. and Demo.
 
 1. super fast cursor word highlighting.
@@ -63,3 +68,9 @@ config = function ()
 end
 }
 ```
+
+## Reference
+
+Extended from the original project: [`xiyaowong / nvim-cursorword`](https://github.com/xiyaowong/nvim-cursorword)
+
+

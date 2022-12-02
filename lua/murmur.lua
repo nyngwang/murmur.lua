@@ -30,10 +30,15 @@ end
 
 
 local function setup_vim_autocmds()
-  vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
+  vim.api.nvim_create_autocmd({ 'CursorMoved' }, {
     group = 'murmur.lua',
     pattern = '*',
     callback = function () M.matchadd() end
+  })
+  vim.api.nvim_create_autocmd({ 'CursorMovedI' }, {
+    group = 'murmur.lua',
+    pattern = '*',
+    callback = function () M.matchadd(true) end
   })
   vim.api.nvim_create_autocmd({ 'WinLeave' }, {
     group = 'murmur.lua',
@@ -55,13 +60,16 @@ function M.setup(opt)
   setup_vim_autocmds()
 end
 
-function M.matchadd()
+function M.matchadd(insert_mode)
   if vim.fn.getbufinfo(vim.fn.bufnr())[1].linecount > disable_on_lines then return end
   if vim.tbl_contains(exclude_filetypes, vim.bo.filetype) then
     return
   end
 
   local column = api.nvim_win_get_cursor(0)[2] + 1 -- one-based indexing.
+    if insert_mode then
+      column = column - 1
+    end
   local line = api.nvim_get_current_line()
 
   -- get the cursor word.

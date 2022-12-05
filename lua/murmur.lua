@@ -3,6 +3,7 @@ local M = {}
 local fn = vim.fn
 local api = vim.api
 local max_len = 20
+local min_len = 3
 local disable_on_lines = 2000
 local exclude_filetypes = {}
 local callbacks = {}
@@ -53,6 +54,7 @@ end
 function M.setup(opt)
   vim.g.cursor_rgb = opt.cursor_rgb ~= nil and opt.cursor_rgb or '#393939'
   max_len = opt.max_len ~= nil and opt.max_len or max_len
+  min_len = opt.min_len ~= nil and opt.min_len or min_len
   disable_on_lines = opt.disable_on_lines ~= nil and opt.disable_on_lines or disable_on_lines
   exclude_filetypes = opt.exclude_filetypes ~= nil and opt.exclude_filetypes or exclude_filetypes
   callbacks = opt.callbacks ~= nil and opt.callbacks or callbacks
@@ -90,7 +92,7 @@ function M.matchadd(insert_mode)
 
   matchdelete()
 
-  if #cursor_word < 3 or #cursor_word > max_len or cursor_word:find("[\192-\255]+") then
+  if #cursor_word < min_len or #cursor_word > max_len or cursor_word:find("[\192-\255]+") then
     return
   end
 

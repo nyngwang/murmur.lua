@@ -97,7 +97,6 @@ function M.matchadd(insert_mode)
   end
 
   cursor_word = fn.escape(cursor_word, [[~"\.^$[]*]])
-  vim.cmd('hi! CURSOR_RGB gui=NONE guibg=' .. vim.g.cursor_rgb)
   vim.w.cursor_word_match_id = fn.matchadd('CURSOR_RGB', [[\<]] .. cursor_word .. [[\>]], -1)
 end
 

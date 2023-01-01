@@ -9,13 +9,11 @@ Cursorword highlighting with callbacks support(I call this *murmuring*). Created
 
 ## DEMO
 
-## Feat. and Demo.
-
 Dynamic coloring of your cursorword:
 
 https://user-images.githubusercontent.com/24765272/210187287-14fb5b67-e8bd-4a40-a139-8b4b6f6d641f.mov
 
-IDE-like no blinking diagnostic message made by adding callbacks:
+IDE-like no blinking diagnostic message with `cursor` scope.
 
 https://user-images.githubusercontent.com/24765272/204716620-b26909cc-9ba9-4475-9d2a-ab5619ab4ad5.mov
 
@@ -83,6 +81,7 @@ use {
 ## Reference
 
 Extended from the original project: [`xiyaowong / nvim-cursorword`](https://github.com/xiyaowong/nvim-cursorword)
+
 
 ## Comparison
 

@@ -15,7 +15,7 @@ https://user-images.githubusercontent.com/24765272/210187287-14fb5b67-e8bd-4a40-
 
 IDE-like no blinking diagnostic message with `cursor` scope.
 
-https://user-images.githubusercontent.com/24765272/204716620-b26909cc-9ba9-4475-9d2a-ab5619ab4ad5.mov
+https://user-images.githubusercontent.com/24765272/210187603-14dda820-e3ad-40b4-a0cf-1274cd205b54.mov
 
 
 ## Example Setup.

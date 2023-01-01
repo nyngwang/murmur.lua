@@ -2,6 +2,7 @@ local M = {}
 
 local fn = vim.fn
 local api = vim.api
+local cursor_rgb = {}
 local max_len = 20
 local min_len = 3
 local disable_on_lines = 2000
@@ -30,7 +31,29 @@ local function matchstr(...)
 end
 
 
-local function setup_vim_autocmds()
+local function sanitize_cursor_rgb()
+  if type(cursor_rgb) == 'table' then return end
+  cursor_rgb = { guifg = 'NONE', guibg = '#393939' }
+end
+
+
+local function create_hi_cursor_rgb()
+  local str_template_hi_cmd = [[ hi murmur_cursor_rgb ]]
+
+  if cursor_rgb.guifg then
+    str_template_hi_cmd = str_template_hi_cmd
+      .. string.format([[ guifg=%s ]], cursor_rgb.guifg)
+  end
+  if cursor_rgb.guibg then
+    str_template_hi_cmd = str_template_hi_cmd
+      .. string.format([[ guibg=%s ]], cursor_rgb.guibg)
+  end
+
+  vim.cmd(str_template_hi_cmd)
+end
+
+
+local function create_autocmds()
   vim.api.nvim_create_autocmd({ 'CursorMoved' }, {
     group = 'murmur.lua',
     pattern = '*',
@@ -46,30 +69,35 @@ local function setup_vim_autocmds()
     pattern = '*',
     callback = function () M.matchdelete() end
   })
+  -- coloring.
+  vim.api.nvim_create_autocmd({ 'VimEnter', 'ColorScheme' }, {
+    group = 'murmur.lua',
+    pattern = '*',
+    callback = function () create_hi_cursor_rgb() end
+  })
 end
-
-
 -------------------------------------------------------------------------------------------------------
 
 function M.setup(opt)
-  vim.g.cursor_rgb = opt.cursor_rgb ~= nil and opt.cursor_rgb or '#393939'
-  max_len = opt.max_len ~= nil and opt.max_len or max_len
-  min_len = opt.min_len ~= nil and opt.min_len or min_len
-  disable_on_lines = opt.disable_on_lines ~= nil and opt.disable_on_lines or disable_on_lines
-  exclude_filetypes = opt.exclude_filetypes ~= nil and opt.exclude_filetypes or exclude_filetypes
-  callbacks = opt.callbacks ~= nil and opt.callbacks or callbacks
+  cursor_rgb = opt.cursor_rgb
+  max_len = opt.max_len or max_len
+  min_len = opt.min_len or min_len
+  disable_on_lines = opt.disable_on_lines or disable_on_lines
+  exclude_filetypes = opt.exclude_filetypes or exclude_filetypes
+  callbacks = opt.callbacks or callbacks
 
-  setup_vim_autocmds()
+  sanitize_cursor_rgb()
+  create_hi_cursor_rgb()
+  create_autocmds()
 end
+
 
 function M.matchadd(insert_mode)
   if vim.fn.getbufinfo(vim.fn.bufnr())[1].linecount > disable_on_lines then return end
-  if vim.tbl_contains(exclude_filetypes, vim.bo.filetype) then
-    return
-  end
+  if vim.tbl_contains(exclude_filetypes, vim.bo.filetype) then return end
 
   local column = api.nvim_win_get_cursor(0)[2] + 1 -- one-based indexing.
-  if insert_mode then column = column - 1 end
+    if insert_mode then column = column - 1 end
   local line = api.nvim_get_current_line()
 
   -- get the cursor word.
@@ -80,9 +108,7 @@ function M.matchadd(insert_mode)
   local cursor_word = left .. right
 
   -- exit when on the same cursor word.
-  if cursor_word == vim.w.cursor_word then
-    return
-  end
+  if cursor_word == vim.w.cursor_word then return end
 
   for _, cb in ipairs(callbacks) do
     cb()
@@ -97,7 +123,7 @@ function M.matchadd(insert_mode)
   end
 
   cursor_word = fn.escape(cursor_word, [[~"\.^$[]*]])
-  vim.w.cursor_word_match_id = fn.matchadd('CURSOR_RGB', [[\<]] .. cursor_word .. [[\>]], -1)
+  vim.w.cursor_word_match_id = fn.matchadd('murmur_cursor_rgb', [[\<]] .. cursor_word .. [[\>]], -1)
 end
 
 function M.matchdelete()

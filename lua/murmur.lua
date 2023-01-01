@@ -3,6 +3,7 @@ local M = {}
 local fn = vim.fn
 local api = vim.api
 local cursor_rgb = {}
+local cursor_rgb_always_use_config = false
 local max_len = 20
 local min_len = 3
 local disable_on_lines = 2000
@@ -70,6 +71,7 @@ local function create_autocmds()
     callback = function () M.matchdelete() end
   })
   -- coloring.
+  if not cursor_rgb_always_use_config then return end
   vim.api.nvim_create_autocmd({ 'VimEnter', 'ColorScheme' }, {
     group = 'murmur.lua',
     pattern = '*',
@@ -80,6 +82,7 @@ end
 
 function M.setup(opt)
   cursor_rgb = opt.cursor_rgb
+  cursor_rgb_always_use_config = opt.cursor_rgb_always_use_config or false
   max_len = opt.max_len or max_len
   min_len = opt.min_len or min_len
   disable_on_lines = opt.disable_on_lines or disable_on_lines
@@ -87,7 +90,6 @@ function M.setup(opt)
   callbacks = opt.callbacks or callbacks
 
   sanitize_cursor_rgb()
-  create_hi_cursor_rgb()
   create_autocmds()
 end
 

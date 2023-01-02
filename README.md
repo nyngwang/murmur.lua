@@ -69,9 +69,7 @@ use {
       group = FOO,
       pattern = 'typewriter-night',
       callback = function ()
-        vim.cmd[[
-          hi murmur_cursor_rgb guifg=#0a100d guibg=#ffee32
-        ]]
+        vim.api.nvim_set_hl(0, "murmur_cursor_rgb", { fg = "#0a100d", bg = "#ffee32" })
       end
     })
   end

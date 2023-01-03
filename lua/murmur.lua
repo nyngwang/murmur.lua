@@ -90,6 +90,7 @@ function M.setup(opt)
   callbacks = opt.callbacks or callbacks
 
   sanitize_cursor_rgb()
+  create_hi_cursor_rgb()
   create_autocmds()
 end
 

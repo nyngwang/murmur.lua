@@ -34,6 +34,10 @@ use {
       --  guibg = '#393939',
       -- },
       -- cursor_rgb_always_use_config = false, -- if set to `true`, then always use `cursor_rgb`.
+      -- yank_blink = {
+      --   enabled = true,
+      --   on_yank = nil, -- Can be customized. See `:h on_yank`.
+      -- },
       max_len = 80,
       min_len = 3, -- this is recommended since I prefer no cursorword highlighting on `if`.
       exclude_filetypes = {},

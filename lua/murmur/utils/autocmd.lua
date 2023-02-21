@@ -4,6 +4,30 @@ local out_v = false
 local just_yank = false
 
 
+local function create_yank_blink()
+  -- recreate `default_yank_hl`.
+  vim.api.nvim_create_autocmd({ 'VimEnter', 'ColorScheme' }, {
+    group = 'murmur.lua',
+    pattern = '*',
+    callback = function ()
+      vim.cmd [[
+        hi murmur_yank_hl guifg=black guibg=#f0e130
+      ]]
+    end
+  })
+  vim.api.nvim_create_autocmd({ 'TextYankPost' }, {
+    group = 'murmur.lua',
+    pattern = '*',
+    callback = function ()
+      if not require('murmur').yank_blink.enabled then return end
+      if type(require('murmur').yank_blink.on_yank) == 'table' then
+        pcall(vim.highlight.on_yank, require('murmur').yank_blink.on_yank)
+      end
+    end,
+  })
+end
+
+
 local function create_murmur_cursor_rgb()
   -- pre-yanking.
   vim.api.nvim_create_autocmd({ 'ModeChanged' }, {
@@ -88,6 +112,7 @@ end
 
 function M.create_autocmds()
   create_murmur_cursor_rgb()
+  create_yank_blink()
 end
 
 

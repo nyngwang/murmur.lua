@@ -35,6 +35,16 @@ function M.setup(opts)
     if type(M.config_cursor_rgb) ~= 'table' then M.config_cursor_rgb = {} end
     if type(M.config_cursor_rgb.guifg) ~= 'string' then M.config_cursor_rgb.guifg = 'NONE' end
     if type(M.config_cursor_rgb.guibg) ~= 'string' then M.config_cursor_rgb.guibg = '#393939' end
+  M.yank_blink = opts.yank_blink or { enabled = true, on_yank = nil }
+    if type(M.yank_blink) ~= 'table' then M.yank_blink = {} end
+    if type(M.yank_blink.enabled) ~= 'boolean' then M.yank_blink.enabled = true end
+    if type(M.yank_blink.on_yank) ~= 'table' then
+      M.yank_blink.on_yank = {
+        higroup = 'murmur_yank_hl',
+        timeout = 200,
+        on_visual = true
+      }
+    end
 
   M.cursor_rgb_always_use_config = opts.cursor_rgb_always_use_config or false
   M.max_len = opts.max_len or 20

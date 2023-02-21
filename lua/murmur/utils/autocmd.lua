@@ -4,12 +4,6 @@ local just_yank = false
 
 
 local function create_yank_blink()
-  -- extend `y`.
-  vim.keymap.set('n', 'y', function ()
-    local ok, m = pcall(require, 'murmur')
-    if ok then m.matchdelete() end
-    return 'y'
-  end, { expr = true })
   -- recreate `default_yank_hl`.
   vim.api.nvim_create_autocmd({ 'VimEnter', 'ColorScheme' }, {
     group = 'murmur.lua',
@@ -20,6 +14,7 @@ local function create_yank_blink()
       ]]
     end
   })
+  -- main part.
   vim.api.nvim_create_autocmd({ 'TextYankPost' }, {
     group = 'murmur.lua',
     pattern = '*',
@@ -27,6 +22,12 @@ local function create_yank_blink()
       if not require('murmur').yank_blink.enabled then return end
       if type(require('murmur').yank_blink.on_yank) == 'table' then
         pcall(vim.highlight.on_yank, require('murmur').yank_blink.on_yank)
+        -- Ignore the possible `CursorMoved` after yanking and add the cursorword manually.
+        just_yank = true
+        vim.defer_fn(function ()
+          require('murmur').matchadd()
+          just_yank = false
+        end, 300)
       end
     end,
   })
@@ -34,25 +35,15 @@ end
 
 
 local function create_murmur_cursor_rgb()
-  vim.api.nvim_create_autocmd({ 'TextYankPost' }, {
-    group = 'murmur.lua',
-    pattern = '*',
-    callback = function ()
-      just_yank = true
-    end
-  })
   -- main part.
-  vim.api.nvim_create_autocmd({ 'CursorMoved' }, {
+  vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorHold' }, {
     group = 'murmur.lua',
     pattern = '*',
     callback = function ()
       if vim.fn.mode() ~= 'n' then return end
       if -- move because of yank
         just_yank
-      then
-        just_yank = false
-        return
-      end
+      then return end
       require('murmur').matchadd()
     end
   })
@@ -68,9 +59,18 @@ local function create_murmur_cursor_rgb()
       if vim.v.event.new_mode == 'v'
         or vim.v.event.new_mode == 'V'
         or vim.v.event.new_mode == ''
+        or (vim.v.event.new_mode == 'no' or vim.v.event.old_mode == 'no')
       then
         require('murmur').matchdelete()
         return
+      end
+      if
+        vim.v.event.old_mode == 'v'
+        or vim.v.event.old_mode == 'V'
+        or vim.v.event.old_mode == ''
+      then
+        if just_yank then return end
+        require('murmur').matchadd()
       end
     end
   })

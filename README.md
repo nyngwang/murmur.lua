@@ -54,7 +54,7 @@ use {
     }
 
     -- To create IDE-like no blinking diagnostic message with `cursor` scope. (should be paired with the callback above)
-    vim.api.nvim_create_autocmd({ 'CursorHold', 'InsertLeave' }, {
+    vim.api.nvim_create_autocmd('CursorHold', {
       group = FOO,
       pattern = '*',
       callback = function ()
@@ -71,7 +71,7 @@ use {
           -- If the window closes for any reason *other* than it being closed by a callback,
           -- make it triggerable again
           vim.api.nvim_create_autocmd("WinClosed", {
-            group = au,
+            group = FOO,
             buffer = buf,
             once = true,
             callback = function() vim.w.diag_shown = false end,

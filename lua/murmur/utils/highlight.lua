@@ -47,6 +47,8 @@ function M.setup(all, current)
 		elseif current.guifg:sub(1, 1) ~= "#" and vim.fn.hlexists(current.guifg) == 1 then
 			current.fg = M.get(current.guifg, "guifg")
 		end
+		current.guifg = nil
+		current.guibg = nil
 	elseif type(current) == "string" and vim.fn.hlexists(current) == 1 then
 		current = { link = current }
 	else

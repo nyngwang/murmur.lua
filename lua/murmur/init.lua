@@ -35,7 +35,6 @@ function M.setup(opts)
     opts = {}
   end
 
-  H.setup(opts.cursor_rgb, opts.cursor_rgb_current)
 
   M.yank_blink = opts.yank_blink or { enabled = true, on_yank = nil }
   if type(M.yank_blink) ~= "table" then
@@ -59,6 +58,7 @@ function M.setup(opts)
   M.exclude_filetypes = opts.exclude_filetypes or {}
   M.callbacks = opts.callbacks or {}
 
+  H.setup(opts.cursor_rgb, opts.cursor_rgb_current)
   A.create_autocmds()
   H.create_highlights()
 end
